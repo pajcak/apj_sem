@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1392124125931
+Build-Jdk: 1.7.0_25
+Built-By: Skarab
+Bundle-Activator: org.sem.business.Activator
+Bundle-ManifestVersion: 2
+Bundle-Name: business OSGi Bundle
+Bundle-SymbolicName: org.sem.business
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: org.sem.business;uses:="org.osgi.util.tracker,org.osgi.f
+ ramework,org.sem.model,org.sem.utils";version="1.0.0.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.osgi.util.track
+ er;version="[1.5,2)",org.sem.integration;version="[1.0,2)",org.sem.mode
+ l;version="[1.0,2)",org.sem.utils;version="[1.0,2)"
+Tool: Bnd-1.50.0
