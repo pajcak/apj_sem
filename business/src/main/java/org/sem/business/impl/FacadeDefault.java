@@ -24,15 +24,24 @@ public class FacadeDefault extends FacadeService {
     @Override
     public void deleteServers(Collection<ServerId> servers) throws MyException {
         for (ServerId id : servers) {
+            Collection<Game> games = DAOFactoryService.getDefault().getGameDAO().findServer(id);
+            for (Game game : games) {
+                DAOFactoryService.getDefault().getGameDAO().delete(game.getId());
+            }
             DAOFactoryService.getDefault().getServerDAO().delete(id);
         }
         DAOFactoryService.getDefault().commit();
     }
 
     @Override
-    public void createGame(Server server, String name, String map, int players, int capacity) throws MyException {
-        GameId id = DAOFactoryService.getDefault().getGameDAO().create(server, name, map, players, capacity);
-        DAOFactoryService.getDefault().getHostDAO().createHost(server.getId(), id);
+    public void createGame(ServerId serverId, String name, String map, int players, int capacity) throws MyException {
+        DAOFactoryService.getDefault().getGameDAO().create(serverId, name, map, players, capacity);
+        DAOFactoryService.getDefault().commit();
+    }
+
+    @Override
+    public void changeGame(Game game) throws MyException {
+        DAOFactoryService.getDefault().getGameDAO().update(game);
         DAOFactoryService.getDefault().commit();
     }
 
@@ -42,11 +51,6 @@ public class FacadeDefault extends FacadeService {
             DAOFactoryService.getDefault().getGameDAO().delete(id);
         }
         DAOFactoryService.getDefault().commit();
-    }
-
-    @Override
-    public void hostGame(ServerId serverId, GameId gameId) throws MyException {
-        DAOFactoryService.getDefault().getHostDAO().createHost(serverId, gameId);
     }
 
     @Override

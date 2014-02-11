@@ -12,7 +12,6 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 import org.osgi.framework.BundleContext;
 import org.sem.integration.DAOFactoryService;
 import org.sem.integration.GameDAO;
-import org.sem.integration.HostDAO;
 import org.sem.integration.ServerDAO;
 
 /**
@@ -24,7 +23,6 @@ public class DerbyDAOFactory extends DAOFactoryService {
     private Connection dbConnection;
     private DerbyGameDAO derbyGameDAO;
     private DerbyServerDAO derbyServerDAO;
-    private DerbyHostDAO derbyHostDAO;
     private BundleContext context;
 
     public DerbyDAOFactory(BundleContext context) {
@@ -32,22 +30,12 @@ public class DerbyDAOFactory extends DAOFactoryService {
             this.context = context;
             dbConnection = createConnection();
             dbConnection.setAutoCommit(false);
+            /*Statement stat = dbConnection.createStatement();
+            stat.executeUpdate("DROP TABLE GAMES");
+            stat.executeUpdate("DROP TABLE SERVERS");*/
             DatabaseMetaData m = dbConnection.getMetaData();
-            ResultSet rs = m.getTables(null, null, "GAMES", null);
-            if (!rs.next()) {
-                Logger.getLogger(getClass().getName()).log(Level.INFO, "Table GAMES generated");
-                Statement s = dbConnection.createStatement();
-                s.executeUpdate("CREATE TABLE GAMES"
-                        + "(ID INT NOT NULL GENERATED ALWAYS AS IDENTITY,"
-                        + "NAME VARCHAR(50),"
-                        + "MAP VARCHAR(50),"
-                        + "CAPACITY INT,"
-                        + "PLAYERS INT,"
-                        + "FOREIGN KEY (SER_ID) REFERENCES SERVERS (ID)"
-                        + "PRIMARY KEY (ID))");
 
-            }
-            rs = m.getTables(null, null, "SERVERS", null);
+            ResultSet rs = m.getTables(null, null, "SERVERS", null);
             if (!rs.next()) {
                 Logger.getLogger(getClass().getName()).log(Level.INFO, "Table SERVERS generated");
                 Statement s = dbConnection.createStatement();
@@ -56,6 +44,21 @@ public class DerbyDAOFactory extends DAOFactoryService {
                         + "NAME VARCHAR(50),"
                         + "ADDRESS VARCHAR(50),"
                         + "SOCKET INT,"
+                        + "PRIMARY KEY (ID))");
+            }
+
+            rs = m.getTables(null, null, "GAMES", null);
+            if (!rs.next()) {
+                Logger.getLogger(getClass().getName()).log(Level.INFO, "Table GAMES generated");
+                Statement s = dbConnection.createStatement();
+                s.executeUpdate("CREATE TABLE GAMES"
+                        + "(ID INT NOT NULL GENERATED ALWAYS AS IDENTITY,"
+                        + "SER_ID INT,"
+                        + "NAME VARCHAR(50),"
+                        + "MAP VARCHAR(50),"
+                        + "CAPACITY INT,"
+                        + "PLAYERS INT,"
+                        + "FOREIGN KEY (SER_ID) REFERENCES SERVERS (ID),"
                         + "PRIMARY KEY (ID))");
             }
             dbConnection.commit();
@@ -93,14 +96,6 @@ public class DerbyDAOFactory extends DAOFactoryService {
             derbyGameDAO = new DerbyGameDAO(getDbConnection());
         }
         return derbyGameDAO;
-    }
-
-    @Override
-    public HostDAO getHostDAO() {
-        if (derbyHostDAO == null) {
-            derbyHostDAO = new DerbyHostDAO(getDbConnection());
-        }
-        return derbyHostDAO;
     }
 
     public Connection getDbConnection() {

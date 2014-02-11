@@ -1,13 +1,10 @@
 package org.sem.controller.dialogs;
 
 import java.awt.GridBagLayout;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import org.sem.business.FacadeService;
-import org.sem.model.Server;
+import org.sem.model.Game;
 import org.sem.utils.GBCBuilder;
 import org.sem.utils.Messages;
 import org.sem.utils.MyException;
@@ -19,32 +16,23 @@ import org.sem.view.MainFrame;
  *
  * @author Skarab
  */
-public class CreateGameDialog extends MyAbstractDialog implements Validator {
+public class ChangeGameDialog extends MyAbstractDialog implements Validator {
 
-    private JComboBox<Server> server;
+    private JLabel server;
+    private JLabel oldName;
     private ValidatedTF name;
+    private JLabel oldMap;
     private JComboBox<String> map;
+    private JLabel oldCapacity;
     private ValidatedTF capacity;
+    private Game game;
 
-    public CreateGameDialog() {
-        super(Messages.Create_Game.cm());
-        server = new JComboBox<>();
-        try {
-            for (Server s : FacadeService.getDefault().getServers()) {
-                server.addItem(s);
-            }
-        } catch (MyException ex) {
-            Logger.getLogger(CreateGameDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Collection<Server> selectedServers = MainFrame.getInstance().getSelectedServers();
-        if (selectedServers.size() > 0) {
-            Server item = selectedServers.iterator().next();
-            for (int i = 0; i < server.getItemCount(); i++) {
-                if (item.getId().equals(server.getItemAt(i).getId())) {
-                    server.setSelectedIndex(i);
-                }
-            }
-        }
+    public ChangeGameDialog(Game game) {
+        super(Messages.Change_Game.cm());
+        this.game = game;
+        oldName = new JLabel(game.getName());
+        oldMap = new JLabel(game.getMap());
+        oldCapacity = new JLabel("" + game.getCapacity());
         name = new ValidatedTF(this);
         map = new JComboBox<>();
         map.addItem("Caves map");
@@ -52,17 +40,26 @@ public class CreateGameDialog extends MyAbstractDialog implements Validator {
         map.addItem("Town map");
         capacity = new ValidatedTF(this);
         getContent().setLayout(new GridBagLayout());
+        for (int i = 0; i < map.getItemCount(); i++) {
+            if (map.getItemAt(i).equals(game.getMap())) {
+                map.setSelectedIndex(i);
+                break;
+            }
+        }
         int row = 0;
-        getContent().add(new JLabel(Messages.Server.cm() + ": "), new GBCBuilder().setY(row).build());
-        getContent().add(server, new GBCBuilder().setY(row).setXRel().build());
-        row++;
+        /*getContent().add(new JLabel(Messages.Server.cm() + ": "), new GBCBuilder().setY(row).build());
+         getContent().add(server, new GBCBuilder().setY(row).setXRel().build());
+         row++;*/
         getContent().add(new JLabel(Messages.Name.cm() + ": "), new GBCBuilder().setY(row).build());
+        getContent().add(oldName, new GBCBuilder().setY(row).setXRel().build());
         getContent().add(name, new GBCBuilder().setY(row).setXRel().build());
         row++;
         getContent().add(new JLabel(Messages.Map.cm() + ": "), new GBCBuilder().setY(row).build());
+        getContent().add(oldMap, new GBCBuilder().setY(row).setXRel().build());
         getContent().add(map, new GBCBuilder().setY(row).setXRel().build());
         row++;
         getContent().add(new JLabel(Messages.Capacity.cm() + ": "), new GBCBuilder().setY(row).build());
+        getContent().add(oldCapacity, new GBCBuilder().setY(row).setXRel().build());
         getContent().add(capacity, new GBCBuilder().setY(row).setXRel().build());
         pack();
         validateDialog();
@@ -90,18 +87,16 @@ public class CreateGameDialog extends MyAbstractDialog implements Validator {
     @Override
     public void okAction() {
         try {
-            if (!validateDialog()) {
-                throw new MyException("Input data are not valid");
-            }
-            FacadeService.getDefault().createGame(
-                    ((Server) server.getSelectedItem()).getId(),
+            FacadeService.getDefault().changeGame(new Game(
+                    game.getId(),
+                    game.getServerId(),
                     name.getText(),
                     map.getSelectedItem().toString(),
                     0,
-                    Integer.parseInt(capacity.getText()));
+                    Integer.parseInt(capacity.getText())));
             MainFrame.getInstance().refresh();
-        } catch (MyException le) {
-            MainFrame.getInstance().showError(le);
+        } catch (MyException ex) {
+            MainFrame.getInstance().showError(ex);
         }
     }
 }

@@ -30,8 +30,6 @@ public abstract class DAOFactoryService {
 
     public abstract GameDAO getGameDAO();
 
-    public abstract HostDAO getHostDAO();
-
     public abstract void commit();
 
     public abstract void rollback();

@@ -7,7 +7,6 @@ import org.sem.business.FacadeService;
 import org.sem.controller.dialogs.CreateGameDialog;
 import org.sem.utils.Messages;
 import org.sem.utils.MyException;
-import org.sem.view.MainFrame;
 
 /**
  *

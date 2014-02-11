@@ -8,21 +8,27 @@ import java.io.Serializable;
  */
 public class Game implements Serializable{
     private GameId id;
+    private ServerId serId;
     private String name;
     private String map;
-    private int capacity;
     private int players;
+    private int capacity;
 
-    public Game(GameId id, String name, String map, int capacity, int players) {
+    public Game(GameId id, ServerId serId, String name, String map, int players, int capacity) {
         this.id = id;
+        this.serId = serId;
         this.name = name;
         this.map = map;
-        this.capacity = capacity;
         this.players = players;
+        this.capacity = capacity;
     }
 
     public GameId getId() {
         return id;
+    }
+
+    public ServerId getServerId() {
+        return serId;
     }
 
     public String getName() {
@@ -33,16 +39,20 @@ public class Game implements Serializable{
         return map;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
     public int getPlayers() {
         return players;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
     public void setId(GameId id) {
         this.id = id;
+    }
+
+    public void setSerId(ServerId serId) {
+        this.serId = serId;
     }
 
     public void setName(String name) {

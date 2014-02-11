@@ -13,9 +13,9 @@ import org.sem.utils.MyException;
  */
 public interface FacadeInterface {
 
-    void hostGame(ServerId serverId, GameId gameId) throws MyException;
+    void createGame(ServerId serverId, String name, String map, int players, int capacity) throws MyException;
 
-    void createGame(Server server, String name, String map, int players, int capacity) throws MyException;
+    void changeGame(Game game) throws MyException;
 
     void deleteGames(Collection<GameId> games) throws MyException;
 
