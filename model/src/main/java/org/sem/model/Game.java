@@ -1,6 +1,7 @@
 package org.sem.model;
 
 import java.io.Serializable;
+import org.sem.utils.Maps;
 
 /**
  *
@@ -10,11 +11,11 @@ public class Game implements Serializable{
     private GameId id;
     private ServerId serId;
     private String name;
-    private String map;
+    private Maps map;
     private int players;
     private int capacity;
 
-    public Game(GameId id, ServerId serId, String name, String map, int players, int capacity) {
+    public Game(GameId id, ServerId serId, String name, Maps map, int players, int capacity) {
         this.id = id;
         this.serId = serId;
         this.name = name;
@@ -35,7 +36,7 @@ public class Game implements Serializable{
         return name;
     }
 
-    public String getMap() {
+    public Maps getMap() {
         return map;
     }
 
@@ -59,7 +60,7 @@ public class Game implements Serializable{
         this.name = name;
     }
 
-    public void setMap(String map) {
+    public void setMap(Maps map) {
         this.map = map;
     }
 

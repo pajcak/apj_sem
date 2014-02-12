@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import org.sem.business.FacadeService;
 import org.sem.model.Game;
 import org.sem.utils.GBCBuilder;
+import org.sem.utils.Maps;
 import org.sem.utils.Messages;
 import org.sem.utils.MyException;
 import org.sem.utils.ValidatedTF;
@@ -22,7 +23,7 @@ public class ChangeGameDialog extends MyAbstractDialog implements Validator {
     private JLabel oldName;
     private ValidatedTF name;
     private JLabel oldMap;
-    private JComboBox<String> map;
+    private JComboBox<Maps> map;
     private JLabel oldCapacity;
     private ValidatedTF capacity;
     private Game game;
@@ -31,13 +32,13 @@ public class ChangeGameDialog extends MyAbstractDialog implements Validator {
         super(Messages.Change_Game.cm());
         this.game = game;
         oldName = new JLabel(game.getName());
-        oldMap = new JLabel(game.getMap());
+        oldMap = new JLabel(game.getMap().toString());
         oldCapacity = new JLabel("" + game.getCapacity());
         name = new ValidatedTF(this);
         map = new JComboBox<>();
-        map.addItem("Caves map");
-        map.addItem("Plains map");
-        map.addItem("Town map");
+        for (Maps m : Maps.values()) {
+            map.addItem(m);
+        }
         capacity = new ValidatedTF(this);
         getContent().setLayout(new GridBagLayout());
         for (int i = 0; i < map.getItemCount(); i++) {
@@ -91,7 +92,7 @@ public class ChangeGameDialog extends MyAbstractDialog implements Validator {
                     game.getId(),
                     game.getServerId(),
                     name.getText(),
-                    map.getSelectedItem().toString(),
+                    (Maps) map.getSelectedItem(),
                     0,
                     Integer.parseInt(capacity.getText())));
             MainFrame.getInstance().refresh();

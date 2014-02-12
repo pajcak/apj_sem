@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.sem.integration.GameDAO;
 import org.sem.model.Game;
 import org.sem.model.GameId;
 import org.sem.model.ServerId;
+import org.sem.utils.Maps;
 import org.sem.utils.MyException;
 
 /**
@@ -20,16 +23,17 @@ public class GameDAOimpl implements GameDAO {
     private Map<GameId, Game> games = new ConcurrentHashMap<>();
 
     public GameDAOimpl() {
-        /*try {
-         create("Center1234", "Field", 0, 4);
-         create("SideGame", "Area", 2, 5);
-         } catch (MyException ex) {
-         Logger.getLogger(GameDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
+        try {
+            create(new ServerId(1), "ExGame1", Maps.CAVES, 0, 4);
+            create(new ServerId(1), "ExGame2", Maps.PLAINS, 2, 5);
+            create(new ServerId(2), "ExGame3", Maps.CAVES, 2, 5);
+        } catch (MyException ex) {
+            Logger.getLogger(GameDAOimpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
-    public void create(ServerId serverId, String name, String map, int capacity, int players) throws MyException {
+    public void create(ServerId serverId, String name, Maps map, int capacity, int players) throws MyException {
         GameId id = new GameId(++keyCount);
         Game game = new Game(id, serverId, name, map, capacity, players);
         games.put(game.getId(), game);
@@ -53,7 +57,7 @@ public class GameDAOimpl implements GameDAO {
     @Override
     public Collection<Game> findServer(ServerId id) throws MyException {
         Collection<Game> res = new ArrayList<>();
-        for (Game game : res) {
+        for (Game game : games.values()) {
             if (game.getServerId().equals(id)) {
                 res.add(game);
             }

@@ -5,6 +5,7 @@ import org.sem.model.Game;
 import org.sem.model.GameId;
 import org.sem.model.Server;
 import org.sem.model.ServerId;
+import org.sem.utils.Maps;
 import org.sem.utils.MyException;
 
 /**
@@ -13,7 +14,7 @@ import org.sem.utils.MyException;
  */
 public interface FacadeInterface {
 
-    void createGame(ServerId serverId, String name, String map, int players, int capacity) throws MyException;
+    void createGame(ServerId serverId, String name, Maps map, int players, int capacity) throws MyException;
 
     void changeGame(Game game) throws MyException;
 

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import org.sem.business.FacadeService;
 import org.sem.model.Server;
 import org.sem.utils.GBCBuilder;
+import org.sem.utils.Maps;
 import org.sem.utils.Messages;
 import org.sem.utils.MyException;
 import org.sem.utils.ValidatedTF;
@@ -23,7 +24,7 @@ public class CreateGameDialog extends MyAbstractDialog implements Validator {
 
     private JComboBox<Server> server;
     private ValidatedTF name;
-    private JComboBox<String> map;
+    private JComboBox<Maps> map;
     private ValidatedTF capacity;
 
     public CreateGameDialog() {
@@ -47,9 +48,9 @@ public class CreateGameDialog extends MyAbstractDialog implements Validator {
         }
         name = new ValidatedTF(this);
         map = new JComboBox<>();
-        map.addItem("Caves map");
-        map.addItem("Plains map");
-        map.addItem("Town map");
+        for (Maps m : Maps.values()) {
+            map.addItem(m);
+        }
         capacity = new ValidatedTF(this);
         getContent().setLayout(new GridBagLayout());
         int row = 0;
@@ -96,7 +97,7 @@ public class CreateGameDialog extends MyAbstractDialog implements Validator {
             FacadeService.getDefault().createGame(
                     ((Server) server.getSelectedItem()).getId(),
                     name.getText(),
-                    map.getSelectedItem().toString(),
+                    (Maps) map.getSelectedItem(),
                     0,
                     Integer.parseInt(capacity.getText()));
             MainFrame.getInstance().refresh();

@@ -22,8 +22,8 @@ public class ServerDAOImpl implements ServerDAO {
 
     public ServerDAOImpl() {
         try {
-            create("America", "1.2.3.4", 3113);
-            create("Europe", "1.2.3.4", 3113);
+            create("ExampleAmerica", "192.168.1.100", 4242);
+            create("ExampleEurope", "192.168.0.0", 3113);
         } catch (MyException ex) {
             Logger.getLogger(ServerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,6 +53,6 @@ public class ServerDAOImpl implements ServerDAO {
 
     @Override
     public Collection<Server> getAll() throws MyException {
-        return new ArrayList<Server>(servers.values());
+        return new ArrayList<>(servers.values());
     }
 }

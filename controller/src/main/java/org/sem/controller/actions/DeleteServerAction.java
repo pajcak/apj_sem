@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.util.Collection;
 import org.sem.business.FacadeService;
 import org.sem.controller.dialogs.DeleteServerDialog;
+import org.sem.model.Game;
 import org.sem.model.Server;
 import org.sem.utils.Messages;
 import org.sem.view.MainFrame;
@@ -30,7 +31,7 @@ public class DeleteServerAction extends MyAbstractAction {
         if (servers.isEmpty()) {
             MainFrame.getInstance().showError(Messages.No_selected_server.cm());
         } else {
-            new DeleteServerDialog(servers);
+            new DeleteServerDialog(servers.iterator().next());
         }
     }
 }

@@ -7,6 +7,7 @@ import org.sem.model.Game;
 import org.sem.model.GameId;
 import org.sem.model.Server;
 import org.sem.model.ServerId;
+import org.sem.utils.Maps;
 import org.sem.utils.MyException;
 
 /**
@@ -34,7 +35,7 @@ public class FacadeDefault extends FacadeService {
     }
 
     @Override
-    public void createGame(ServerId serverId, String name, String map, int players, int capacity) throws MyException {
+    public void createGame(ServerId serverId, String name, Maps map, int players, int capacity) throws MyException {
         DAOFactoryService.getDefault().getGameDAO().create(serverId, name, map, players, capacity);
         DAOFactoryService.getDefault().commit();
     }

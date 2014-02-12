@@ -12,6 +12,7 @@ import org.sem.integration.GameDAO;
 import org.sem.model.Game;
 import org.sem.model.GameId;
 import org.sem.model.ServerId;
+import org.sem.utils.Maps;
 import org.sem.utils.MyException;
 
 /**
@@ -40,11 +41,11 @@ public class DerbyGameDAO implements GameDAO {
     }
 
     @Override
-    public void create(ServerId serverId, String name, String map, int capacity, int players) throws MyException {
+    public void create(ServerId serverId, String name, Maps map, int capacity, int players) throws MyException {
         try {
             createPS.setInt(1, serverId.getId());
             createPS.setString(2, name);
-            createPS.setString(3, map);
+            createPS.setString(3, map.name());
             createPS.setInt(4, capacity);
             createPS.setInt(5, players);
             createPS.execute();
@@ -78,7 +79,7 @@ public class DerbyGameDAO implements GameDAO {
                 return new Game(new GameId(rs.getInt(1)),
                         new ServerId(Integer.parseInt(rs.getString(2))),
                         rs.getString(3),
-                        rs.getString(4),
+                        Maps.valueOf(rs.getString(4)),
                         Integer.parseInt(rs.getString(5)),
                         Integer.parseInt(rs.getString(6)));
             } else {
@@ -101,7 +102,7 @@ public class DerbyGameDAO implements GameDAO {
                 games.add(new Game(new GameId(rs.getInt(1)),
                         new ServerId(Integer.parseInt(rs.getString(2))),
                         rs.getString(3),
-                        rs.getString(4),
+                        Maps.valueOf(rs.getString(4)),
                         Integer.parseInt(rs.getString(5)),
                         Integer.parseInt(rs.getString(6))));
             }
@@ -121,7 +122,7 @@ public class DerbyGameDAO implements GameDAO {
                 games.add(new Game(new GameId(rs.getInt(1)),
                         new ServerId(Integer.parseInt(rs.getString(2))),
                         rs.getString(3),
-                        rs.getString(4),
+                        Maps.valueOf(rs.getString(4)),
                         Integer.parseInt(rs.getString(5)),
                         Integer.parseInt(rs.getString(6))));
             }
